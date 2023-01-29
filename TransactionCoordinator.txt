@@ -1,0 +1,24 @@
+
+
+public interface ITransactionCoordinator
+{
+    Dictionary<decimal, int> CoordinateTransaction(decimal itemPrice, Dictionary<decimal, int> customerPayment);
+}
+
+public class TransactionCoordinator : ITransactionCoordinator
+{
+    private readonly IChangeCalculatorService _changeCalculatorService;
+    private readonly IChangeCalculatorConfiguration _changeCalculatorConfiguration;
+    public TransactionCoordinator(IChangeCalculatorService changeCalculatorService, IChangeCalculatorConfiguration changeCalculatorConfiguration)
+    {
+        _changeCalculatorService = changeCalculatorService;
+        _changeCalculatorConfiguration = changeCalculatorConfiguration;
+    }
+
+    public Dictionary<decimal, int> CoordinateTransaction(decimal itemPrice, Dictionary<decimal, int> customerPayment)
+    {
+        var change = _changeCalculatorService.CalculateChange(itemPrice, customerPayment);
+        _changeCalculatorConfiguration.SetDenomination(_changeCalculatorService.Denominations);
+        return change;
+    }
+}
