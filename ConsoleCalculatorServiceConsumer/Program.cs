@@ -147,6 +147,17 @@ internal class Program
             message = $"Transaction for user4 itemPrice {itemPrice}";
             MakeTransaction(message, itemPrice, customerPayment, _changeService);
 
+            //user5
+            itemPrice = 10.50m;
+            customerPayment = new Dictionary<decimal, int>
+            {
+                { 20.00m, 1 },
+                { 0.01m, 1}
+
+            };
+            message = $"Transaction for user5 itemPrice {itemPrice}";
+            MakeTransaction(message, itemPrice, customerPayment, _changeService);
+
         }
         catch(Exception ex )
         {

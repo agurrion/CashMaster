@@ -49,6 +49,15 @@ namespace CashMaster.POS.Services
             }
         }
 
+        private void RollbackChange(Dictionary<decimal, int> change)
+        {
+            foreach (var item in change)
+            {
+                if (_denominations.ContainsKey(item.Key))
+                    _denominations[item.Key] += item.Value;
+            }
+        }
+
         /// <summary>
         /// Calculates the change required for the given price and customer payment.
         /// </summary>
@@ -90,11 +99,12 @@ namespace CashMaster.POS.Services
                     }
                 }
             }
-            //update the denominations' inventory
+            //update the denominations' inventory if it was not able to complete the change due
             if (changeDue > 0)
             {
                 //rollback what i've added
                 RollbackInventory(customerPayment);
+                RollbackChange(change);
                 return customerPayment;
             }
                 
@@ -102,7 +112,7 @@ namespace CashMaster.POS.Services
                 return change;
         }
 
-        
+       
     }
 
 
